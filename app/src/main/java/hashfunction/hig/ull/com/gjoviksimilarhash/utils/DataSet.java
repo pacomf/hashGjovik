@@ -11,19 +11,6 @@ public class DataSet {
     public static ArrayList<String> gen;
     public static int hd;
 
-    public static String[] comp1 = {"1110001001011100010011010101",
-                                    "0100011101010101101011101111",
-                                    "1111111101010101000001101111",
-                                    "0011001100110011111100101010",
-                                    "0001110011010101010100010101"};
-
-    public static String[] comp2 = {"1110001001011100010011010101",
-                                    "0101011100010101001011101111",
-                                    "1110111101010111000001101011",
-                                    "0011000100110011111100101010",
-                                    "1110100010101010100011101010"};
-
-
     public static void generateUpToHD(String or, String cu, int position, int k, boolean upTo){
         char[] original = or.toCharArray();
         char[] current = cu.toCharArray();

@@ -72,16 +72,24 @@ public class Principal extends ActionBarActivity {
             int c = 3;
             int n = 7;
 
-            for (int i=0; i< DataSet.comp1.length; i++) {
+            inputA =      "0001110101010111010111101011";
+            String init = "0000000000000000000000000000";
 
-                inputA = DataSet.comp1[i];
-                inputB = DataSet.comp2[i];
+            DataSet.gen = new ArrayList<String>();
+            DataSet.hd = 4;
+            DataSet.generateUpToHD(inputA, init, 0, 4, true);
 
-                System.out.println("********** PRUEBA "+i+" ***********");
+            int[] hda = new int[inputA.length()];
 
-                System.out.println("A: " + inputA);
-                System.out.println("B: " + inputB);
-                System.out.println("Hamming Distance A vs B: " + SpongeConstruction.getHammingDistance(inputA, inputB));
+            int hdauxb, hdauxa;
+
+            System.out.println("********** PRUEBA PARA "+DataSet.gen.size()+" VALORES ***********");
+
+            for (int i=0; i< DataSet.gen.size(); i++) {
+
+                inputB = DataSet.gen.get(i);
+
+                hdauxb = SpongeConstruction.getHammingDistance(inputA, inputB);
 
                 String stateA = SpongeConstruction.absorbing(inputA, r, c);
                 String stateB = SpongeConstruction.absorbing(inputB, r, c);
@@ -93,17 +101,15 @@ public class Principal extends ActionBarActivity {
                 stateA = SpongeConstruction.squeezing(stateA, r, c, n);
                 stateB = SpongeConstruction.squeezing(stateB, r, c, n);
 
-                System.out.println("Squeezing: " + stateA);
-                System.out.println("Squeezing: " + stateB);
-                System.out.println("Squeezing Hamming Distance A vs B: " + SpongeConstruction.getHammingDistance(stateA, stateB));
+                hdauxa = SpongeConstruction.getHammingDistance(stateA, stateB);
+
+                hda[Math.abs(hdauxa-hdauxb)]++;
             }
 
-            DataSet.gen = new ArrayList<String>();
-            DataSet.hd = 6;
-            DataSet.generateUpToHD("0110111", "0000000", 0, 6, true);
+            System.out.println("********** FIN ***********");
 
-            for (String s: DataSet.gen) {
-                System.out.println(s);
+            for (int i=0; i< hda.length; i++){
+                System.out.println("Con "+i+" Cambios: "+hda[i]);
             }
 
             return rootView;
