@@ -14,6 +14,7 @@ import android.os.Build;
 import java.util.ArrayList;
 
 import hashfunction.hig.ull.com.gjoviksimilarhash.utils.DataSet;
+import hashfunction.hig.ull.com.gjoviksimilarhash.utils.MerkleDamgard;
 import hashfunction.hig.ull.com.gjoviksimilarhash.utils.SpongeConstruction;
 
 
@@ -85,21 +86,25 @@ public class Principal extends ActionBarActivity {
 
             System.out.println("********** PRUEBA PARA "+DataSet.gen.size()+" VALORES ***********");
 
+            String stateA, stateB;
+
             for (int i=0; i< DataSet.gen.size(); i++) {
 
                 inputB = DataSet.gen.get(i);
 
                 hdauxb = SpongeConstruction.getHammingDistance(inputA, inputB);
 
-                String stateA = SpongeConstruction.absorbing(inputA, r, c);
-                String stateB = SpongeConstruction.absorbing(inputB, r, c);
+                // MERKLE-DAMGARD
 
-                //System.out.println("Absorbing A: "+stateA);
-                //System.out.println("Absorbing B: "+stateB);
-                //System.out.println("Absorbing Hamming Distance A vs B: "+SpongeConstruction.getHammingDistance(stateA, stateB));
+                stateA = MerkleDamgard.apply(inputA, init.substring(0, n));
+                stateB = MerkleDamgard.apply(inputB, init.substring(0, n));
 
-                stateA = SpongeConstruction.squeezing(stateA, r, c, n);
-                stateB = SpongeConstruction.squeezing(stateB, r, c, n);
+                // SPONGE CONSTRUCTION
+
+                //stateA = SpongeConstruction.absorbing(inputA, r, c);
+                //stateB = SpongeConstruction.absorbing(inputB, r, c);
+                //stateA = SpongeConstruction.squeezing(stateA, r, c, n);
+                //stateB = SpongeConstruction.squeezing(stateB, r, c, n);
 
                 hdauxa = SpongeConstruction.getHammingDistance(stateA, stateB);
 
@@ -109,7 +114,7 @@ public class Principal extends ActionBarActivity {
             System.out.println("********** FIN ***********");
 
             for (int i=0; i< hda.length; i++){
-                System.out.println("Con "+i+" Cambios: "+hda[i]);
+                System.out.println("Con "+i+" Cambios: "+hda[i]+" ("+((hda[i]*100)/DataSet.gen.size())+"%)");
             }
 
             return rootView;
